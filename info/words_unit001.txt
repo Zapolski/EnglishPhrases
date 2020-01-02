@@ -1,0 +1,11 @@
+provide
+revenue
+base
+employee
+operate
+specialize
+subsidiary
+competitor
+produce
+competitor
+exporter

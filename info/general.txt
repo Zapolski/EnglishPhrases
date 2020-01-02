@@ -1,0 +1,14 @@
+summer
+autumn
+winter
+spring
+morning
+evening
+midnight
+noon
+afternoon
+midday
+yesterday
+today
+tomorrow
+night
