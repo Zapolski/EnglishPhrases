@@ -22,9 +22,18 @@
                 <option data-bind="value: $data"></option>
             </datalist>
             <input data-bind="click: clearButtonClick" type="button" value=" X ">
-            <input type="submit" value="Get examples">
-            <p><label><input type="checkbox" data-bind="checked: isAddRecrods" /> add records into table</label></p>
+            <input data-bind="click: addWordToSet" type="button" value="Add to set">
+            <input type="submit" value="Load word">
+
+            <p><label><input type="checkbox" data-bind="checked: isUseFullSearch" /> use full search (case sensitive,
+                    full word)</label></p>
+            <p><textarea data-bind="textInput: setWords" rows="15" cols="25" name="text"></textarea></p>
+            <input data-bind="click: clearSetClick" type="button" value=" X ">
+            <input data-bind="click: loadSet" type="button" value="Load set">
+
             <p><label><input type="checkbox" data-bind="checked: isShuffle" /> shuffle</label></p>
+
+
             <br><br>
             <span>Available examples in table: </span>
             <span data-bind="text: (records().length)"></span>
@@ -95,23 +104,15 @@
 
         var PhrasesViewModel = function () {
             var self = this;
+
             self.records = ko.observableArray([]);
-
-            self.availableWords = ko.observableArray([
-                'angry+', 'load+', 'monday+', 'tuesday+', 'wednesday+', 'thursday+', 'friday+', 'saturday+', 'sunday+', 'provide+',
-                'revenue+', 'base+', 'employee+', 'operate+', 'specialize+', 'subsidiary+ ', 'competitor+', 'produce+', 'exporter+', 'revitalize+',
-                'deal with+', 'consultant+', 'supplier+', 'client+', 'colleague+', 'staff+', 'customer', 'consist of', 'consist in', 'involve',
-                'communicate', 'agency', 'contact', 'currently', 'consultancy', 'work on', 'take part', 'argue', 'spoil', 'persuade',
-                'shut', 'confirm', 'earn', 'achieve', 'motivate', 'envy', 'wait', 'encourage', 'occur', 'blame',
-                'resist', 'summer', 'autumn', 'winter', 'spring', 'morning', 'evening', 'midnight', 'noon', 'afternoon',
-                'midday', 'yesterday', 'today', 'tomorrow', 'night', 'january', 'february', 'march', 'april', 'may',
-                'june', 'july', 'august', 'september', 'october', 'november', 'december', 'unveil', 'ambitious', 'outline',
-                'lucrative', 'fee', 'aim', 'myriad', 'similarity', 'engagement', 'fortune'
-            ]);
-
+            self.availableWords = ko.observableArray();
+            self.setWords = ko.observable("");
             self.searchString = ko.observable("");
-            self.currentSearchString = ko.observable(self.searchString());
-            self.records = ko.observableArray([]);
+            self.records = ko.observableArray();
+
+            self.isShuffle = false;
+            self.isUseFullSearch = false;
 
             // for edit mode
             self.newId = ko.observable("");
@@ -121,16 +122,93 @@
             self.newRule = ko.observable("");
             self.newSoundPath = ko.observable("");
 
-            self.isAddRecrods = true;
-            self.isShuffle = false;
+            self.loadSet = function () {
+                let words = self.setWords().split('\n');
+                self.records([]);
+                words.forEach(element => {
+                    if (element === "") {
+                        return;
+                    }
+                    let url = "http://localhost:8080/records/" + element.toLowerCase();
+                    if (self.isUseFullSearch) {
+                        url = "http://localhost:8080/records/query/" + element + "/0";
+                    }
+                    $.ajax(url, {
+                        type: "GET",
+                        success: function (allData) {
+                            var json = ko.toJSON(allData);
+                            var recordsFromServer = JSON.parse(json);
+                            var array = [];
+                            if (recordsFromServer.length === 0) {
+                                console.log("Empty set for " + element);
+                                return;
+                            } else {
+                                console.log("Preocess: [" + element + "] - " + recordsFromServer.length)
+                            }
+                            recordsFromServer.forEach(element => {
+                                var rec = new Phrase({
+                                    id: element.id,
+                                    word: element.word,
+                                    russian: element.russian,
+                                    english: element.english,
+                                    rule: element.rule,
+                                    soundPath: element.soundPath,
+                                    mode: "",
+                                    currentAnswer: ""
+                                });
+                                array.push(rec);
+                            });
+                            Array.prototype.push.apply(array, self.records());
+                            if (self.isShuffle) {
+                                array = shuffle(array);
+                            }
+                            self.records(array);
+                        }
+                    });
+                });
+            }
 
-            self.clearButtonClick = function (){
+            self.addWordToSet = function () {
+                var currentSet = self.setWords();
+                if (self.searchString() != "") {
+                    if (currentSet != "") {
+                        currentSet = currentSet + '\n';
+                    }
+                    currentSet = currentSet + self.searchString();
+                    self.setWords(currentSet);
+                }
+            }
+
+            self.clearButtonClick = function () {
                 self.searchString("");
+            }
+
+            self.clearSetClick = function () {
+                self.setWords("");
+            }
+
+            self.loadAllAvailableWord = function () {
+                $.ajax("http://localhost:8080/records/words", {
+                    type: "GET",
+                    success: function (allData) {
+                        var json = ko.toJSON(allData);
+                        var wordsFromServer = JSON.parse(json);
+                        var array = [];
+                        wordsFromServer.forEach(element => {
+                            array.push(element.value);
+                        });
+                        self.availableWords(array);
+                    }
+                });
             }
 
             // load records from server: GET on records resource
             self.loadRecordByWord = function () {
-                $.ajax("http://localhost:8080/records/" + self.searchString(), {
+                let url = "http://localhost:8080/records/" + self.searchString().toLowerCase();
+                if (self.isUseFullSearch) {
+                    url = "http://localhost:8080/records/query/" + self.searchString() + "/0";
+                }
+                $.ajax(url, {
                     type: "GET",
                     success: function (allData) {
                         var json = ko.toJSON(allData);
@@ -150,18 +228,17 @@
                             array.push(rec);
                         });
 
-                        if (self.isAddRecrods) {
-                            Array.prototype.push.apply(array, self.records());
-                            //array = mergeArrays(self.records(),array);
-                        }
+                        // if (self.isAddRecrods) {
+                        //     Array.prototype.push.apply(array, self.records());
+                        // }
 
                         if (self.isShuffle) {
                             array = shuffle(array);
                         }
+                        console.log(array);
                         self.records(array);
                     }
                 });
-                self.currentSearchString(self.searchString());
             };
 
             self.showEditor = function (record) {
@@ -282,7 +359,6 @@
                 }
             }
 
-            //name.charAt(0).toUpperCase() + name.slice(1)
             self.getEnglishWihtNamesHintsAndFirstUpper = function (english) {
                 var result = getWithFirstUpperCase(english);
                 return "<span class='tip hide'>" + result.replace(/(\[.*?\])/g, "</span><span class='tip show'>$1</span><span class='tip hide'>") + "</span>";
@@ -291,7 +367,9 @@
             self.getRusianWithFirstUpperLetter = function (russian) {
                 return getWithFirstUpperCase(russian)
             };
-            self.loadRecordByWord();
+
+            // init events
+            self.loadAllAvailableWord();
         };
 
         var Phrase = function (data) {
@@ -305,6 +383,40 @@
             self.mode = ko.observable(data.mode);
             self.currentAnswer = ko.observable(data.currentAnswer);
         };
+
+        // var DataSupplier = function () {
+
+        //     var self = this;
+
+        //     self.phrases = [];
+
+        //     self.getPhrasesByWord = function (word) {
+        //         console.log("Inside getPhrasesByWord")
+        //         self.records = [];
+        //         $.ajax("http://localhost:8080/records/" + word, {
+        //             type: "GET",
+        //             success: function (allData) {
+        //                 var json = ko.toJSON(allData);
+        //                 var recordsFromServer = JSON.parse(json);
+        //                 recordsFromServer.forEach(element => {
+        //                     var rec = new Phrase({
+        //                         id: element.id,
+        //                         word: element.word,
+        //                         russian: element.russian,
+        //                         english: element.english,
+        //                         rule: element.rule,
+        //                         soundPath: element.soundPath,
+        //                         mode: "",
+        //                         currentAnswer: ""
+        //                     });
+        //                     self.phrases.push(rec);
+        //                 });
+        //             }
+        //         });
+        //         console.log(self.phrases);
+        //     }
+        // }
+
         ko.options.useOnlyNativeEvents = true;
         ko.applyBindings(new PhrasesViewModel());
     </script>
