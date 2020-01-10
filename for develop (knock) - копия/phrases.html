@@ -25,13 +25,22 @@
             <input data-bind="click: addWordToSet" type="button" value="Add to set">
             <input type="submit" value="Load word">
 
-            <p><label><input type="checkbox" data-bind="checked: isUseFullSearch" /> use full search (case sensitive,
-                    full word)</label></p>
+            <br>
+            <label><input name="searchType" type="radio" value="0" data-bind="checked: radioSelectedOptionValue" />use
+                search with database references</label>
+            <label><input name="searchType" type="radio" value="1" data-bind="checked: radioSelectedOptionValue" />use
+                full search by sentences</label>
+            <br>
+            <label data-bind="visible: radioSelectedOptionValue() == 1"><input type="checkbox"
+                    data-bind="checked: isUseCaseSensitiveSearch, visible: radioSelectedOptionValue() == 1" />case
+                sensitive</label>
+            <label><input type="checkbox" data-bind="checked: isShuffle" />shuffle</label>
+
             <p><textarea data-bind="textInput: setWords" rows="15" cols="25" name="text"></textarea></p>
             <input data-bind="click: clearSetClick" type="button" value=" X ">
             <input data-bind="click: loadSet" type="button" value="Load set">
 
-            <p><label><input type="checkbox" data-bind="checked: isShuffle" /> shuffle</label></p>
+
 
 
             <br><br>
@@ -112,7 +121,7 @@
             self.records = ko.observableArray();
 
             self.isShuffle = false;
-            self.isUseFullSearch = false;
+            self.isUseCaseSensitiveSearch = false;
 
             // for edit mode
             self.newId = ko.observable("");
@@ -121,6 +130,7 @@
             self.newEnglish = ko.observable("");
             self.newRule = ko.observable("");
             self.newSoundPath = ko.observable("");
+            self.radioSelectedOptionValue = ko.observable("0")
 
             self.loadSet = function () {
                 let words = self.setWords().split('\n');
@@ -129,10 +139,20 @@
                     if (element === "") {
                         return;
                     }
+
+                    //use search with database references (radioSelectedOptionValue=0)
                     let url = "http://localhost:8080/records/" + element.toLowerCase();
-                    if (self.isUseFullSearch) {
-                        url = "http://localhost:8080/records/query/" + element + "/0";
+
+                    // use full search by sentences (radioSelectedOptionValue=1)
+                    if (self.radioSelectedOptionValue() === "1") {
+                        url = "http://localhost:8080/records/query/" + element;
+                        if (self.isUseCaseSensitiveSearch) {
+                            url = url + "/0";
+                        } else {
+                            url = url + "/1";
+                        }
                     }
+
                     $.ajax(url, {
                         type: "GET",
                         success: function (allData) {
@@ -204,10 +224,19 @@
 
             // load records from server: GET on records resource
             self.loadRecordByWord = function () {
+                //use search with database references (radioSelectedOptionValue=0)
                 let url = "http://localhost:8080/records/" + self.searchString().toLowerCase();
-                if (self.isUseFullSearch) {
-                    url = "http://localhost:8080/records/query/" + self.searchString() + "/0";
+
+                // use full search by sentences (radioSelectedOptionValue=1)
+                if (self.radioSelectedOptionValue() === "1") {
+                    url = "http://localhost:8080/records/query/" + self.searchString();
+                    if (self.isUseCaseSensitiveSearch) {
+                        url = url + "/0";
+                    } else {
+                        url = url + "/1";
+                    }
                 }
+
                 $.ajax(url, {
                     type: "GET",
                     success: function (allData) {
@@ -227,10 +256,6 @@
                             });
                             array.push(rec);
                         });
-
-                        // if (self.isAddRecrods) {
-                        //     Array.prototype.push.apply(array, self.records());
-                        // }
 
                         if (self.isShuffle) {
                             array = shuffle(array);
