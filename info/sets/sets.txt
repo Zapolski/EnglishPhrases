@@ -1,27 +1,106 @@
-addict
-addicted
-addictive
-addiction
-obsess
-obsessive
-obsession
-harmless
-harmful
-bore
-boredom
-harm
-bored
-boring
+Search by DB:
 
-cry
-fly
+provide, revenue, base, employee, operate, specialize, subsidiary, competitor, produce, competitor, exporter
+deal with, consultant, supplier, client, colleague, staff, customer, consist of, consist in, involve, involved in, communicate, agency, contact, currently, consultancy, work for, work on, take part
+argue, spoil, persuade, shut, confirm, earn, achieve, motivate
+wait, encourage, occur, blame, resist
+summer, autumn, winter, spring, morning, evening, midnight, noon, afternoon,midday,yesterday,today,tomorrow, night
+january,february,march,april,may,june,july,august,september,october,november,december
+unveil, ambitious, outline, lucrative, fee, aim, myriad, similarity, engagement, fortune, revitalize
 
 create
-envy
 wait
 encourage
 occur
 
-dull
-relieve
 
+
+Full search:
+
+
+
+addict
+addicts
+addicted
+addictive
+addiction
+addictions
+
+obsess
+obsesses
+obsessed
+obsessive
+obsession
+obsessions
+
+bore
+boredom
+bored
+boring
+
+cry
+cries
+cried
+crew
+crown
+
+fly
+flies
+flew
+flown
+
+harmless [4]
+harmful [5]
+harm  [0]
+harms [0]
+harmed [0]
+harmlessness [0]
+unharmed [1]
+harmlessly [1]
+
+cruelty [3]
+incredibly [4]
+
+envy [8]
+envies [0]
+envied [1]
+Monday [26]
+Mondays [0]
+Tuesday [18]
+Tuesdays [1]
+Wednesday [12]
+Wednesdays [1]
+Thursday [20]
+Thursdays [2]
+Friday [44]
+Fridays [3]
+Saturday [33]
+Saturdays [2]
+Sunday [34]
+Sundays [6]
+
+all over the world [7]
+s said [1]
+is said [3]
+they say [9]
+needy [3]
+treasures [1]
+treasured [1]
+
+s supposed
+is supposed
+m supposed
+am supposed
+re supposed
+are supposed
+was supposed
+were supposed
+
+s expected
+is expected
+m expected
+am expected
+re expected
+are expected
+was expected
+were expected
