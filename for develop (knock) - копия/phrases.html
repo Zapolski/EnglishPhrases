@@ -133,9 +133,11 @@
             self.radioSelectedOptionValue = ko.observable("0")
 
             self.loadSet = function () {
+                self.setWords(self.setWords().replace(/ \[.*\]/g, ""));
                 let words = self.setWords().split('\n');
                 self.records([]);
                 words.forEach(element => {
+
                     if (element === "") {
                         return;
                     }
@@ -159,11 +161,12 @@
                             var json = ko.toJSON(allData);
                             var recordsFromServer = JSON.parse(json);
                             var array = [];
+                            self.setWords(self.setWords().replace(new RegExp("^"+element +"$", "gm") , element + " [" + recordsFromServer.length + "]"))
                             if (recordsFromServer.length === 0) {
                                 console.log("Empty set for " + element);
                                 return;
                             } else {
-                                console.log("Preocess: [" + element + "] - " + recordsFromServer.length)
+                                console.log("Process: [" + element + "] - " + recordsFromServer.length)
                             }
                             recordsFromServer.forEach(element => {
                                 var rec = new Phrase({
