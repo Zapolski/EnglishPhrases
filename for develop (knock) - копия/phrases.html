@@ -8,103 +8,117 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/sidenav.css" rel="stylesheet">
 </head>
 
-<body>
-    <section id="content">
-        <br><br>
-        <h2 class="center">Training English phrases with native speakers</h2>
+<body style="display: none;" data-bind="visible: true">
+    <div class="sidenav">
+        <span>Set words:</span>
+        <textarea class="set-text-area" data-bind="textInput: setWords" rows="15" cols="25"></textarea>
+        <div class="set-controls">
+            <input data-bind="click: clearSetClick" type="button" value="Clear">
+            <input data-bind="click: loadSet" type="button" value="Load set"><br>
+        </div>
+        <span data-bind="text: 'Unique words: ['+wordsInSentences().length+']'"></span>
+        <div data-bind="foreach: wordsInSentences">
+            <span>
+                <label class="word-link"
+                    data-bind="text: $data.word+' ['+$data.count+']', click: $parent.filterRecords"></label>
+            </span>
+        </div>
+    </div>
 
-        <form class="center" data-bind="submit: loadRecordByWord">
-            <label>Request string: </label>
-            <input id="wordInput" data-bind="value: searchString" type="text" list="wordList">
-            <datalist id="wordList" data-bind="foreach: availableWords">
-                <option data-bind="value: $data"></option>
-            </datalist>
-            <input data-bind="click: clearButtonClick" type="button" value=" X ">
-            <input data-bind="click: addWordToSet" type="button" value="Add to set">
-            <input type="submit" value="Load word">
-
-            <br>
-            <label><input name="searchType" type="radio" value="0" data-bind="checked: radioSelectedOptionValue" />use
-                search with database references</label>
-            <label><input name="searchType" type="radio" value="1" data-bind="checked: radioSelectedOptionValue" />use
-                full search by sentences</label>
-            <br>
-            <label data-bind="visible: radioSelectedOptionValue() == 1"><input type="checkbox"
-                    data-bind="checked: isUseCaseSensitiveSearch, visible: radioSelectedOptionValue() == 1" />case
-                sensitive</label>
-            <label><input type="checkbox" data-bind="checked: isShuffle" />shuffle</label>
-
-            <p><textarea data-bind="textInput: setWords" rows="15" cols="25" name="text"></textarea></p>
-            <input data-bind="click: clearSetClick" type="button" value=" X ">
-            <input data-bind="click: loadSet" type="button" value="Load set">
-
-
-
-
+    <div class="main">
+        <section id="content">
             <br><br>
-            <span>Available examples in table: </span>
-            <span data-bind="text: (records().length)"></span>
-        </form><br><br>
+            <h2 class="center">Training English phrases with native speakers</h2>
+
+            <form class="center" data-bind="submit: loadRecordByWord">
+                <label>Request string: </label>
+                <input id="wordInput" data-bind="value: searchString" type="text" list="wordList">
+                <datalist id="wordList" data-bind="foreach: availableWords">
+                    <option data-bind="value: $data"></option>
+                </datalist>
+                <input data-bind="click: clearButtonClick" type="button" value="Clear">
+                <input type="submit" value="Load word">
+                <input data-bind="click: addWordToSet" type="button" value="Add to set">
+
+                <br>
+                <label><input name="searchType" type="radio" value="0"
+                        data-bind="checked: radioSelectedOptionValue" />use
+                    search with database references</label>
+                <label><input name="searchType" type="radio" value="1"
+                        data-bind="checked: radioSelectedOptionValue" />use
+                    full search by sentences</label>
+                <br>
+                <label data-bind="visible: radioSelectedOptionValue() == 1"><input type="checkbox"
+                        data-bind="checked: isUseCaseSensitiveSearch, visible: radioSelectedOptionValue() == 1" />case
+                    sensitive</label>
+                <label><input type="checkbox" data-bind="checked: isShuffle" />shuffle</label>
+
+                <br><br>
+                <span>Available examples: </span>
+                <span data-bind="text: (records().length)"></span>
+            </form><br><br>
 
 
-        <table class="table-sentences">
-            <tbody data-bind="foreach: records">
-                <tr>
-                    <td class="center">
-                        <span data-bind="text: ($index()+1)"></span><br>
-                        <input data-bind="event: {change: $parent.showQuestionCheckboxChange}" class="show_question"
-                            type="checkbox">
-                        <span data-bind="text: $data.id()"></span>
-                    </td>
-                    <td>
-                        <span data-bind="attr: {tabindex: ($index() + 100001), data_title: $data.rule()}"
-                            class='support question_hidden' data-title=''>
-                            <em>?</em>
-                        </span>
-                        <span data-bind="text: $parent.getRusianWithFirstUpperLetter($data.russian())"
-                            class="question question_hidden"></span>
-                        <input data-bind="event: {keyup: $parent.inputFiledKeyUp}, attr: {tabindex: ($index() + 1)}"
-                            class='input-field' type="text" placeholder="Введите перевод">
-                        <span
-                            data-bind="html: $parent.getEnglishWihtNamesHintsAndFirstUpper($data.english())"></span><br>
-                        <div class='check'></div>
-                        <button data-bind="click: $parent.showEditor">Show editor</button>
-                        <button data-bind="click: $parent.hideEditor, visible: ($data.mode() === 'edit')">Hide
-                            editor</button>
+            <table class="table-sentences">
+                <tbody data-bind="foreach: records">
+                    <tr data-bind="visible: $data.visible()">
+                        <td class="center">
+                            <span data-bind="text: ($index()+1)"></span><br>
+                            <input data-bind="event: {change: $parent.showQuestionCheckboxChange}" class="show_question"
+                                type="checkbox">
+                            <span data-bind="text: $data.id()"></span>
+                        </td>
+                        <td>
+                            <span data-bind="attr: {tabindex: ($index() + 100001), data_title: $data.rule()}"
+                                class='support question_hidden' data-title=''>
+                                <em>?</em>
+                            </span>
+                            <span data-bind="text: $parent.getRusianWithFirstUpperLetter($data.russian())"
+                                class="question question_hidden"></span>
+                            <input data-bind="event: {keyup: $parent.inputFiledKeyUp}, attr: {tabindex: ($index() + 1)}"
+                                class='input-field' type="text" placeholder="Enter translation">
+                            <span
+                                data-bind="html: $parent.getEnglishWihtNamesHintsAndFirstUpper($data.english())"></span><br>
+                            <div class='check'></div>
+                            <button data-bind="click: $parent.showEditor">Show editor</button>
+                            <button data-bind="click: $parent.hideEditor, visible: ($data.mode() === 'edit')">Hide
+                                editor</button>
 
-                        <div data-bind="visible: ($data.mode() === 'edit')">
-                            <label>Id</label>
-                            <input data-bind="value: $parent.newId" type="text" class='input-field'><br>
-                            <label>Word</label>
-                            <input data-bind="value: $parent.newWord" type="text" class='input-field'><br>
-                            <label>Russian</label>
-                            <input data-bind="value: $parent.newRussian" type="text" class='input-field'><br>
-                            <label>English</label>
-                            <input data-bind="value: $parent.newEnglish" type="text" class='input-field'><br>
-                            <label>Sound</label>
-                            <input data-bind="value: $parent.newSoundPath" type="text" class='input-field'><br>
-                            <label>Rule</label>
-                            <input data-bind="value: $parent.newRule" type="text" class='input-field'><br>
-                            <button data-bind="click: $parent.updateRecord">Update record</button>
-                        </div>
+                            <div data-bind="visible: ($data.mode() === 'edit')">
+                                <label>Id</label>
+                                <input data-bind="value: $parent.newId" type="text" class='input-field'><br>
+                                <label>Word</label>
+                                <input data-bind="value: $parent.newWord" type="text" class='input-field'><br>
+                                <label>Russian</label>
+                                <input data-bind="value: $parent.newRussian" type="text" class='input-field'><br>
+                                <label>English</label>
+                                <input data-bind="value: $parent.newEnglish" type="text" class='input-field'><br>
+                                <label>Sound</label>
+                                <input data-bind="value: $parent.newSoundPath" type="text" class='input-field'><br>
+                                <label>Rule</label>
+                                <input data-bind="value: $parent.newRule" type="text" class='input-field'><br>
+                                <button data-bind="click: $parent.updateRecord">Update record</button>
+                            </div>
 
-                    </td>
-                    <td class="center">
-                        <a data-bind="event: {click: $parent.musicButtonClick}" class="music-button"><img
-                                src="img/player_play.png"></a>
-                        <audio data-bind="attr: {src: '../words/'+ $data.word() + '/' + $data.soundPath()}"
-                            class="player" type="audio/mpeg"></audio>
-                        <br><input
-                            data-bind="event: {change: $parent.inputRangeInputAndChange, input: $parent.inputRangeInputAndChange}"
-                            type="range" step="0.1" min="0.2" max="2" value="1" class="speed" />
-                        <br><span class="speed-text">1.0</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+                        </td>
+                        <td class="center">
+                            <a data-bind="event: {click: $parent.musicButtonClick}" class="music-button"><img
+                                    src="img/player_play.png"></a>
+                            <audio data-bind="attr: {src: '../words/'+ $data.word() + '/' + $data.soundPath()}"
+                                class="player" type="audio/mpeg"></audio>
+                            <br><input
+                                data-bind="event: {change: $parent.inputRangeInputAndChange, input: $parent.inputRangeInputAndChange}"
+                                type="range" step="0.1" min="0.2" max="2" value="1" class="speed" />
+                            <br><span class="speed-text">1.0</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
 
     <script type='text/javascript' src='js/knockout-3.5.0.js'></script>
     <script src="js/utils.js"></script>
@@ -119,6 +133,7 @@
             self.setWords = ko.observable("");
             self.searchString = ko.observable("");
             self.records = ko.observableArray();
+            self.wordsInSentences = ko.observableArray([]);
 
             self.isShuffle = false;
             self.isUseCaseSensitiveSearch = false;
@@ -161,7 +176,7 @@
                             var json = ko.toJSON(allData);
                             var recordsFromServer = JSON.parse(json);
                             var array = [];
-                            self.setWords(self.setWords().replace(new RegExp("^"+element +"$", "gm") , element + " [" + recordsFromServer.length + "]"))
+                            self.setWords(self.setWords().replace(new RegExp("^" + element + "$", "gm"), element + " [" + recordsFromServer.length + "]"))
                             if (recordsFromServer.length === 0) {
                                 console.log("Empty set for " + element);
                                 return;
@@ -177,7 +192,8 @@
                                     rule: element.rule,
                                     soundPath: element.soundPath,
                                     mode: "",
-                                    currentAnswer: ""
+                                    currentAnswer: "",
+                                    visible: true
                                 });
                                 array.push(rec);
                             });
@@ -186,6 +202,33 @@
                                 array = shuffle(array);
                             }
                             self.records(array);
+
+                            //fill in words array
+                            let wordsMap = new Map();
+                            self.records().forEach(r => {
+                                console.log(r);
+                                r.english().replace(/\[|\]/g, "").split(/[ ,:;?.!]/g).forEach(str => {
+                                    if (str != "") {
+                                        if (wordsMap.get(str)) {
+                                            wordsMap.set(str, wordsMap.get(str) + 1);
+                                        } else {
+                                            wordsMap.set(str, 1);
+                                        }
+                                    }
+                                });
+                                //console.log(wordsMap);
+                                self.wordsInSentences();
+                            });
+                            let wordsArray = [];
+                            wordsMap.forEach((value, key, map) => {
+                                wordsArray.push({
+                                    word: key,
+                                    count: value
+                                });
+                            });
+                            wordsArray.sort((ob1, ob2) => (ob1.word.toLowerCase() > ob2.word.toLowerCase()) ? 1 : ((ob1.word.toLowerCase() < ob2.word.toLowerCase()) ? -1 : 0));
+                            console.log(wordsArray);
+                            self.wordsInSentences(wordsArray);
                         }
                     });
                 });
@@ -255,7 +298,8 @@
                                 rule: element.rule,
                                 soundPath: element.soundPath,
                                 mode: "",
-                                currentAnswer: ""
+                                currentAnswer: "",
+                                visible: true
                             });
                             array.push(rec);
                         });
@@ -268,6 +312,17 @@
                     }
                 });
             };
+
+            self.filterRecords = function (stat) {
+                let reg = new RegExp("\\b" + stat.word + "\\b", "g");
+                self.records().forEach(element => {
+                    if (!element.english().match(reg)) {
+                        element.visible(false);
+                    } else {
+                        element.visible(true)
+                    }
+                });
+            }
 
             self.showEditor = function (record) {
 
@@ -410,6 +465,7 @@
             self.soundPath = ko.observable(data.soundPath);
             self.mode = ko.observable(data.mode);
             self.currentAnswer = ko.observable(data.currentAnswer);
+            self.visible = ko.observable(data.visible);
         };
 
         // var DataSupplier = function () {
@@ -449,5 +505,3 @@
         ko.applyBindings(new PhrasesViewModel());
     </script>
 </body>
-
-</html>
