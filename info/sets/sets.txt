@@ -4,7 +4,10 @@ provide, revenue, base, employee, operate, specialize, subsidiary, competitor, p
 deal with, consultant, supplier, client, colleague, staff, customer, consist of, consist in, involve, involved in, communicate, agency, contact, currently, consultancy, work for, work on, take part
 argue, spoil, persuade, shut, confirm, earn, achieve, motivate
 wait, encourage, occur, blame, resist
-summer, autumn, winter, spring, morning, evening, midnight, noon, afternoon,midday,yesterday,today,tomorrow, night
+summer, autumn, winter, spring, 
+
+morning, evening, midnight, noon, afternoon,midday,yesterday,today,tomorrow, night
+
 january,february,march,april,may,june,july,august,september,october,november,december
 unveil, ambitious, outline, lucrative, fee, aim, myriad, similarity, engagement, fortune, revitalize
 
@@ -12,42 +15,56 @@ create
 wait
 encourage
 occur
+cry
+fly
 
+addict
+addicted
+addictive
+addiction
+obsess
+obsessive
+obsession
+harmless
+harmful
+bore
+boredom
+harm
+bored
+boring
 
 
 Full search:
 
+//addict
+//addicts
+//addicted
+//addictive
+//addiction
+//addictions
 
+//obsess
+//obsesses
+//obsessed
+//obsessive
+//obsession
+//obsessions
 
-addict
-addicts
-addicted
-addictive
-addiction
-addictions
+//bore
+//boredom
+//bored
+//boring
 
-obsess
-obsesses
-obsessed
-obsessive
-obsession
-obsessions
+//cry
+//cries
+//cried
+//crew
+//crown
 
-bore
-boredom
-bored
-boring
-
-cry
-cries
-cried
-crew
-crown
-
-fly
-flies
-flew
-flown
+//fly
+//flies
+//flew
+//flown
 
 harmless [4]
 harmful [5]
@@ -87,20 +104,20 @@ needy [3]
 treasures [1]
 treasured [1]
 
-s supposed
-is supposed
-m supposed
-am supposed
-re supposed
-are supposed
-was supposed
-were supposed
+s supposed [0]
+is supposed [2]
+m supposed [0]
+am supposed [0]
+re supposed [0]
+are supposed [1]
+was supposed [1]
+were supposed [0]
 
-s expected
-is expected
-m expected
-am expected
-re expected
-are expected
-was expected
-were expected
+s expected [0]
+is expected [15]
+m expected [0]
+am expected [0]
+re expected [0]
+are expected [8]
+was expected [1]
+were expected [4]
