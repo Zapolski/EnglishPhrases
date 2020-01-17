@@ -22,7 +22,8 @@
         <span data-bind="text: 'Unique words: ['+wordsInSentences().length+']'"></span>
         <div data-bind="foreach: wordsInSentences">
             <span>
-                <label class="word-link" data-bind="text: $data.word+' ['+$data.count+']'"></label>
+                <label class="word-link"
+                    data-bind="text: $data.word+' ['+$data.count+']', click: $parent.filterRecords"></label>
             </span>
         </div>
     </div>
@@ -56,14 +57,14 @@
                 <label><input type="checkbox" data-bind="checked: isShuffle" />shuffle</label>
 
                 <br><br>
-                <span>Available examples in table: </span>
+                <span>Available examples: </span>
                 <span data-bind="text: (records().length)"></span>
             </form><br><br>
 
 
             <table class="table-sentences">
                 <tbody data-bind="foreach: records">
-                    <tr>
+                    <tr data-bind="visible: $data.visible()">
                         <td class="center">
                             <span data-bind="text: ($index()+1)"></span><br>
                             <input data-bind="event: {change: $parent.showQuestionCheckboxChange}" class="show_question"
@@ -191,7 +192,8 @@
                                     rule: element.rule,
                                     soundPath: element.soundPath,
                                     mode: "",
-                                    currentAnswer: ""
+                                    currentAnswer: "",
+                                    visible: true
                                 });
                                 array.push(rec);
                             });
@@ -296,7 +298,8 @@
                                 rule: element.rule,
                                 soundPath: element.soundPath,
                                 mode: "",
-                                currentAnswer: ""
+                                currentAnswer: "",
+                                visible: true
                             });
                             array.push(rec);
                         });
@@ -309,6 +312,17 @@
                     }
                 });
             };
+
+            self.filterRecords = function (stat) {
+                let reg = new RegExp("\\b" + stat.word + "\\b", "g");
+                self.records().forEach(element => {
+                    if (!element.english().match(reg)) {
+                        element.visible(false);
+                    } else {
+                        element.visible(true)
+                    }
+                });
+            }
 
             self.showEditor = function (record) {
 
@@ -451,6 +465,7 @@
             self.soundPath = ko.observable(data.soundPath);
             self.mode = ko.observable(data.mode);
             self.currentAnswer = ko.observable(data.currentAnswer);
+            self.visible = ko.observable(data.visible);
         };
 
         // var DataSupplier = function () {
