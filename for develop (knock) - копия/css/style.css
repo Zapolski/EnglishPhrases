@@ -156,3 +156,16 @@ span.support::before/*если используется атрибут data-titl
    min-height: 50px; 
    height: auto;
 }
+
+.set-text-area {
+  background: #999;
+  margin: 5px;
+  padding: 5px;
+  width: 90%;
+  resize: vertical;
+}
+
+.set-controls {
+  padding: 5px;
+  text-align: center; 
+}

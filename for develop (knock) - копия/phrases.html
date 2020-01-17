@@ -15,11 +15,19 @@
 
 
     <div class="sidenav">
+
+        <span>Set words:</span>
+        <textarea class="set-text-area" data-bind="textInput: setWords" rows="15" cols="25"></textarea>
+        <div class="set-controls">
+            <input data-bind="click: clearSetClick" type="button" value="Clear">
+            <input data-bind="click: loadSet" type="button" value="Load set"><br>
+        </div>
+
+
         <span data-bind="text: 'Unique words: ['+wordsInSentences().length+']'"></span>
         <div data-bind="foreach: wordsInSentences">
             <span>
-                <label class="word-link" data-bind="text: $data.word"></label>
-                <!-- <input type="checkbox" data-bind="checked: false" /> -->
+                <label class="word-link" data-bind="text: $data.word+' ['+$data.count+']'"></label>
             </span>
         </div>
     </div>
@@ -35,9 +43,9 @@
                 <datalist id="wordList" data-bind="foreach: availableWords">
                     <option data-bind="value: $data"></option>
                 </datalist>
-                <input data-bind="click: clearButtonClick" type="button" value=" X ">
-                <input data-bind="click: addWordToSet" type="button" value="Add to set">
+                <input data-bind="click: clearButtonClick" type="button" value="Clear">
                 <input type="submit" value="Load word">
+                <input data-bind="click: addWordToSet" type="button" value="Add to set">
 
                 <br>
                 <label><input name="searchType" type="radio" value="0"
@@ -52,9 +60,9 @@
                     sensitive</label>
                 <label><input type="checkbox" data-bind="checked: isShuffle" />shuffle</label>
 
-                <p><textarea data-bind="textInput: setWords" rows="15" cols="25" name="text"></textarea></p>
+                <!-- <p><textarea data-bind="textInput: setWords" rows="15" cols="25" name="text"></textarea></p>
                 <input data-bind="click: clearSetClick" type="button" value=" X ">
-                <input data-bind="click: loadSet" type="button" value="Load set">
+                <input data-bind="click: loadSet" type="button" value="Load set"> -->
 
                 <br><br>
                 <span>Available examples in table: </span>
@@ -119,7 +127,6 @@
             </table>
         </section>
     </div>
-
 
     <script type='text/javascript' src='js/knockout-3.5.0.js'></script>
     <script src="js/utils.js"></script>
