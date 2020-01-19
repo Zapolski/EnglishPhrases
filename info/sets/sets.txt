@@ -2,21 +2,29 @@ Search by DB:
 
 provide, revenue, base, employee, operate, specialize, subsidiary, competitor, produce, competitor, exporter
 deal with, consultant, supplier, client, colleague, staff, customer, consist of, consist in, involve, involved in, communicate, agency, contact, currently, consultancy, work for, work on, take part
-argue, spoil, persuade, shut, confirm, earn, achieve, motivate
-wait, encourage, occur, blame, resist
-summer, autumn, winter, spring, 
+
+argue, spoil, persuade, shut, , earn, achieve, motivate
+
+wait [17]
+encourage [7]
+occur [4]
+blame [10]
+resist [11]
+
+summer
+autumn
+winter
+spring
+create
+confirm
 
 morning, evening, midnight, noon, afternoon,midday,yesterday,today,tomorrow, night
 
 january,february,march,april,may,june,july,august,september,october,november,december
+
 unveil, ambitious, outline, lucrative, fee, aim, myriad, similarity, engagement, fortune, revitalize
 
-create
-wait
-encourage
-occur
-cry
-fly
+
 
 addict
 addicted
@@ -81,6 +89,7 @@ incredibly [4]
 envy [8]
 envies [0]
 envied [1]
+
 Monday [26]
 Mondays [0]
 Tuesday [18]

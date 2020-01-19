@@ -28,8 +28,18 @@
         </div>
     </div>
 
+
+
     <div class="main">
         <section id="content">
+
+            <form class="center" name="clockform">
+                <input name="clock" size=6 value="00:00:00.00" onclick="findTIME()">
+                <input name="clearer" type="button" value="Clear" onclick="clearALL()">                
+                <input name="starter" type="button" value="Play/Pause" onclick="findTIME()">
+            </form>
+
+
             <br><br>
             <h2 class="center">Training English phrases with native speakers</h2>
 
@@ -122,6 +132,7 @@
 
     <script type='text/javascript' src='js/knockout-3.5.0.js'></script>
     <script src="js/utils.js"></script>
+    <script src="js/timer.js"></script>    
 
     <script>
 
