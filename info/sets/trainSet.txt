@@ -1,0 +1,5 @@
+wait [17]
+encourage [7]
+occur [4]
+blame [10]
+resist [11]

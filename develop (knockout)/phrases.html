@@ -14,8 +14,13 @@
 <body style="display: none;" data-bind="visible: true">
     <div class="sidenav">
         <span>Set words:</span>
-        <textarea class="set-text-area" data-bind="textInput: setWords" rows="15" cols="25"></textarea>
+        <textarea id="set-text-area" class="set-text-area" data-bind="textInput: setWords" rows="15"
+            cols="25"></textarea>
         <div class="set-controls">
+            <input id="file-input" type="file" data-bind="event: {change: fileInputChange}">
+
+            <input id="file-button" data-bind="click: fileButtonClick" type="button" value="Load file">
+            <input id="save-file-button" data-bind="click: saveFileButtonClick" type="button" value="Save file"><br><br>
             <input data-bind="click: clearSetClick" type="button" value="Clear">
             <input data-bind="click: loadSet" type="button" value="Load set"><br>
         </div>
@@ -35,7 +40,7 @@
 
             <form class="center" name="clockform">
                 <input name="clock" size=6 value="00:00:00.00" onclick="findTIME()">
-                <input name="clearer" type="button" value="Clear" onclick="clearALL()">                
+                <input name="clearer" type="button" value="Clear" onclick="clearALL()">
                 <input name="starter" type="button" value="Play/Pause" onclick="findTIME()">
             </form>
 
@@ -132,7 +137,7 @@
 
     <script type='text/javascript' src='js/knockout-3.5.0.js'></script>
     <script src="js/utils.js"></script>
-    <script src="js/timer.js"></script>    
+    <script src="js/timer.js"></script>
 
     <script>
 
@@ -156,18 +161,69 @@
             self.newEnglish = ko.observable("");
             self.newRule = ko.observable("");
             self.newSoundPath = ko.observable("");
-            self.radioSelectedOptionValue = ko.observable("0")
+            self.radioSelectedOptionValue = ko.observable("0");
+
+            self.saveFileButtonClick = function () {
+                console.log("saveFileButtonClick");
+                var textToSave = self.setWords(),
+                    textToSaveAsBlob = new Blob([textToSave], { type: "text/plain" }),
+                    textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob),
+                    fileNameToSaveAs = "set",
+                    downloadLink = document.createElement("a");
+
+                downloadLink.download = fileNameToSaveAs + ".txt";
+                downloadLink.innerHTML = "Download File";
+                downloadLink.href = textToSaveAsURL;
+                downloadLink.onclick = function destroyClickedElement(event) {
+                    document.body.removeChild(event.target);
+                };
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+            };
+
+            self.fileButtonClick = function () {
+                console.log("file-button click");
+                let fileInput = document.getElementById("file-input");
+                fileInput.click();
+            };
+            self.fileInputChange = function (vm, evt) {
+                console.log("file-input change");
+                ko.utils.arrayForEach(evt.target.files, function (file) {
+                    console.log(file.name);
+                    if (file.type == 'text/plain') {
+                        // Создаём новый FileReader, который и будет читать наш файл
+                        var reader = new FileReader();
+
+                        // Событие успешного чтения
+                        reader.onloadend = function (event) {
+                            let text = event.target.result;
+                            console.log(text);
+                            self.setWords(text);
+                            evt.target.value = "";
+                        };
+
+                        // Событие ошибки
+                        reader.onerror = function () {
+                            alert('Error during reading file!');
+                        };
+
+                        // Читаем наш файл как текст
+                        reader.readAsText(file);
+                    } else {
+                        alert('It is not a text file!');
+                    }
+                });
+            };
 
             self.loadSet = function () {
                 self.setWords(self.setWords().replace(/ \[.*\]/g, ""));
                 let words = self.setWords().split('\n');
                 self.records([]);
                 words.forEach(element => {
-
                     if (element === "") {
                         return;
                     }
-
                     //use search with database references (radioSelectedOptionValue=0)
                     let url = "http://localhost:8080/records/" + element.toLowerCase();
 
@@ -187,7 +243,8 @@
                             var json = ko.toJSON(allData);
                             var recordsFromServer = JSON.parse(json);
                             var array = [];
-                            self.setWords(self.setWords().replace(new RegExp("^" + element + "$", "gm"), element + " [" + recordsFromServer.length + "]"))
+                            self.setWords(self.setWords().replace(new RegExp("^" + element + "$", "gm"), element.replace(/\r/g, "")
+                                + " [" + recordsFromServer.length + "]"))
                             if (recordsFromServer.length === 0) {
                                 console.log("Empty set for " + element);
                                 return;
@@ -478,40 +535,6 @@
             self.currentAnswer = ko.observable(data.currentAnswer);
             self.visible = ko.observable(data.visible);
         };
-
-        // var DataSupplier = function () {
-
-        //     var self = this;
-
-        //     self.phrases = [];
-
-        //     self.getPhrasesByWord = function (word) {
-        //         console.log("Inside getPhrasesByWord")
-        //         self.records = [];
-        //         $.ajax("http://localhost:8080/records/" + word, {
-        //             type: "GET",
-        //             success: function (allData) {
-        //                 var json = ko.toJSON(allData);
-        //                 var recordsFromServer = JSON.parse(json);
-        //                 recordsFromServer.forEach(element => {
-        //                     var rec = new Phrase({
-        //                         id: element.id,
-        //                         word: element.word,
-        //                         russian: element.russian,
-        //                         english: element.english,
-        //                         rule: element.rule,
-        //                         soundPath: element.soundPath,
-        //                         mode: "",
-        //                         currentAnswer: ""
-        //                     });
-        //                     self.phrases.push(rec);
-        //                 });
-        //             }
-        //         });
-        //         console.log(self.phrases);
-        //     }
-        // }
-
         ko.options.useOnlyNativeEvents = true;
         ko.applyBindings(new PhrasesViewModel());
     </script>
