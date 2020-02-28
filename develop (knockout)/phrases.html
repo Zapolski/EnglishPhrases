@@ -73,7 +73,7 @@
 
                 <br><br>
                 <span>Available examples: </span>
-                <span data-bind="text: (records().length)"></span>
+                <span data-bind="text: getCountVisiblePhrases()"></span>
             </form><br><br>
 
 
@@ -407,6 +407,18 @@
                         element.visible(true)
                     }
                 });
+
+
+            }
+
+            self.getCountVisiblePhrases = function(){
+                let visibleCount = 0;
+                self.records().forEach(element=> {
+                    if (element.visible()){
+                        visibleCount++;
+                    }
+                });
+                return visibleCount;
             }
 
             // обрабатывает клик по фразе 'Unique words' в области используемых слов
