@@ -24,7 +24,7 @@
             <input data-bind="click: clearSetClick" type="button" value="Clear">
             <input data-bind="click: loadSet" type="button" value="Load set"><br>
         </div>
-        <span data-bind="text: 'Unique words: ['+wordsInSentences().length+']'"></span>
+        <span data-bind="text: 'Unique words: ['+wordsInSentences().length+']', click: showAllPhrases"></span>
         <div data-bind="foreach: wordsInSentences">
             <span>
                 <label class="word-link"
@@ -271,11 +271,17 @@
                             }
                             self.records(array);
 
-                            //fill in words array
+                            // формируем список используемых в текущих фразах слов
                             let wordsMap = new Map();
                             self.records().forEach(r => {
                                 console.log(r);
-                                r.english().replace(/\[|\]/g, "").split(/[ ,:;?.!]/g).forEach(str => {
+                                r.english()
+                                            .replace(/\[|\]/g, "") // вырезаем квадратные скобки для имен
+                                            //.replace(/ '|' |'\.|\.'|^'|'$/g," ") // вырезаем одинарные кавычки в наименованиях, прямой речи и т.д.
+                                            //.replace(/ '|' |'\.|\.'|^'|'$/g," ") // требуется повторное вырезание для последовательных прямых речеей
+                                            //.replace(/\$/g," ") // вырезаем символ доллара
+                                            //.replace(/\%/g," ") // вырезаем символ процента
+                                            .split(/[ ,:;?.!]/g).forEach(str => {
                                     if (str != "") {
                                         if (wordsMap.get(str)) {
                                             wordsMap.set(str, wordsMap.get(str) + 1);
@@ -381,8 +387,19 @@
                 });
             };
 
+            // обрабатывает клик по любому слову в области используемых слов
+            // фильтрует фразы по кликнутому слову
             self.filterRecords = function (stat) {
-                let reg = new RegExp("\\b" + stat.word + "\\b", "g");
+                let clearedWord = stat.word
+                    .replace(/'/g,"")
+                    .replace(/\$/g,"")
+                    .replace(/\%/g,"")
+                    .replace(/\=/g,"")
+                    .replace(/\(/g,"")
+                    .replace(/\)/g,"")
+                    .replace(/£/g,"")
+                let reg = new RegExp("\\b" + clearedWord + "\\b", "g");
+                console.log("Created regExp: "+ reg);
                 self.records().forEach(element => {
                     if (!element.english().match(reg)) {
                         element.visible(false);
@@ -390,6 +407,14 @@
                         element.visible(true)
                     }
                 });
+            }
+
+            // обрабатывает клик по фразе 'Unique words' в области используемых слов
+            // показывает все фразы
+            self.showAllPhrases = function(){
+                self.records().forEach(element => {
+                        element.visible(true);
+                });                
             }
 
             self.showEditor = function (record) {
