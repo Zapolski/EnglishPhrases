@@ -1,0 +1,129 @@
+deal with [7]
+consultant [1]
+supplier [1]
+client [1]
+colleague [2]
+staff [12]
+consist of [3]
+consist in [1]
+exporter [2]
+30
+
+wait [17]
+confirm [13]
+30
+
+occur [4]
+blame [10]
+summer [9]
+autumn [1]
+create [6]
+30
+
+encourage [7]
+spring [13]
+spoil [10]
+30
+
+argue [11]
+night [14]
+motivate [4]
+specialize [1]
+30
+
+persuade [9]
+earn [13]
+achieve [4]
+addiction [1]
+27
+
+obsess [2]
+obsessive [2]
+harmful [2]
+harm [4]
+bore [12]
+boredom [3]
+bored [3]
+boring [2]
+30
+
+addict [2]
+addicted [2]
+addictive [3]
+base [19]
+employee [1]
+competitor [3]
+30
+
+operate [20]
+april [5]
+june [5]
+30
+
+produce [12]
+competitor [3]
+subsidiary [4]
+resist [11]
+30
+
+provide [5]
+revenue [3]
+afternoon [7]
+tomorrow [5]
+january [5]
+february [5]
+30
+
+march [17]
+harmless [3]
+winter [4]
+obsession [6]
+30
+
+contact [17]
+currently [2]
+consultancy [3]
+work on [5]
+take part [3]
+30
+
+unveil [2]
+shut [17]
+outline [11]
+30
+
+ambitious [4]
+lucrative [1]
+revitalize [2]
+aim [11]
+myriad [2]
+involve [7]
+agency [3]
+30
+
+similarity [8]
+fortune [12]
+engagement [9]
+fee [1]
+30
+
+morning [7]
+noon [3]
+midday [5]
+yesterday [5]
+november [5]
+december [5]
+30
+
+evening [11]
+midnight [6]
+july [5]
+today [8]
+30
+
+august [6]
+september [5]
+october [5]
+customer [4]
+communicate [10]
+30
