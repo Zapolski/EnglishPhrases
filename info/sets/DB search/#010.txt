@@ -1,0 +1,4 @@
+produce [12]
+competitor [3]
+subsidiary [4]
+resist [11]

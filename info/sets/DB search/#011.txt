@@ -1,0 +1,6 @@
+provide [5]
+revenue [3]
+afternoon [7]
+tomorrow [5]
+january [5]
+february [5]

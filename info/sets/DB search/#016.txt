@@ -1,0 +1,4 @@
+similarity [8]
+fortune [12]
+engagement [9]
+fee [1]

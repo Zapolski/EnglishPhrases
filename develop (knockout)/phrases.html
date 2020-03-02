@@ -270,39 +270,7 @@
                                 array = shuffle(array);
                             }
                             self.records(array);
-
-                            // формируем список используемых в текущих фразах слов
-                            let wordsMap = new Map();
-                            self.records().forEach(r => {
-                                console.log(r);
-                                r.english()
-                                            .replace(/\[|\]/g, "") // вырезаем квадратные скобки для имен
-                                            //.replace(/ '|' |'\.|\.'|^'|'$/g," ") // вырезаем одинарные кавычки в наименованиях, прямой речи и т.д.
-                                            //.replace(/ '|' |'\.|\.'|^'|'$/g," ") // требуется повторное вырезание для последовательных прямых речеей
-                                            //.replace(/\$/g," ") // вырезаем символ доллара
-                                            //.replace(/\%/g," ") // вырезаем символ процента
-                                            .split(/[ ,:;?.!]/g).forEach(str => {
-                                    if (str != "") {
-                                        if (wordsMap.get(str)) {
-                                            wordsMap.set(str, wordsMap.get(str) + 1);
-                                        } else {
-                                            wordsMap.set(str, 1);
-                                        }
-                                    }
-                                });
-                                //console.log(wordsMap);
-                                self.wordsInSentences();
-                            });
-                            let wordsArray = [];
-                            wordsMap.forEach((value, key, map) => {
-                                wordsArray.push({
-                                    word: key,
-                                    count: value
-                                });
-                            });
-                            wordsArray.sort((ob1, ob2) => (ob1.word.toLowerCase() > ob2.word.toLowerCase()) ? 1 : ((ob1.word.toLowerCase() < ob2.word.toLowerCase()) ? -1 : 0));
-                            console.log(wordsArray);
-                            self.wordsInSentences(wordsArray);
+                            self.splitByWords();
                         }
                     });
                 });
@@ -376,6 +344,7 @@
                                 visible: true
                             });
                             array.push(rec);
+                            
                         });
 
                         if (self.isShuffle) {
@@ -383,9 +352,38 @@
                         }
                         console.log(array);
                         self.records(array);
+                        self.splitByWords();
                     }
                 });
             };
+
+            // формируем список используемых в текущих фразах слов
+            self.splitByWords = function (){
+                let wordsMap = new Map();
+                self.records().forEach(r => {
+                    r.english().replace(/\[|\]/g, "") // вырезаем квадратные скобки для имен
+                               .split(/[ ,:;?.!]/g).forEach(str => {
+                        if (str != "") {
+                            if (wordsMap.get(str)) {
+                                wordsMap.set(str, wordsMap.get(str) + 1);
+                            } else {
+                                wordsMap.set(str, 1);
+                            }
+                        }
+                    });
+                    self.wordsInSentences();
+                });
+                let wordsArray = [];
+                wordsMap.forEach((value, key, map) => {
+                    wordsArray.push({
+                        word: key,
+                        count: value
+                    });
+                });
+                wordsArray.sort((ob1, ob2) => (ob1.word.toLowerCase() > ob2.word.toLowerCase()) ? 1 : ((ob1.word.toLowerCase() < ob2.word.toLowerCase()) ? -1 : 0));
+                console.log(wordsArray);
+                self.wordsInSentences(wordsArray);                
+            }
 
             // обрабатывает клик по любому слову в области используемых слов
             // фильтрует фразы по кликнутому слову
@@ -411,6 +409,7 @@
 
             }
 
+            // считает количество доступных для отображения фраз
             self.getCountVisiblePhrases = function(){
                 let visibleCount = 0;
                 self.records().forEach(element=> {

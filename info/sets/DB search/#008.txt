@@ -1,0 +1,6 @@
+addict [2]
+addicted [2]
+addictive [3]
+base [19]
+employee [1]
+competitor [3]

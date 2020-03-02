@@ -1,0 +1,5 @@
+august [6]
+september [5]
+october [5]
+customer [4]
+communicate [10]
