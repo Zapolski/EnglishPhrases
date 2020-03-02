@@ -1,3 +1,4 @@
+#1
 deal with [7]
 consultant [1]
 supplier [1]
@@ -9,10 +10,12 @@ consist in [1]
 exporter [2]
 30
 
+#2
 wait [17]
 confirm [13]
 30
 
+#3
 occur [4]
 blame [10]
 summer [9]
@@ -20,6 +23,7 @@ autumn [1]
 create [6]
 30
 
+#4
 encourage [7]
 spring [13]
 spoil [10]
@@ -127,3 +131,9 @@ october [5]
 customer [4]
 communicate [10]
 30
+
+rumour [2]
+fear [13]
+mist [6]
+inevitable [3]
+frank [2]
