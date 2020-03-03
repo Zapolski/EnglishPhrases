@@ -11,14 +11,13 @@
     <link href="css/sidenav.css" rel="stylesheet">
 </head>
 
-<body style="display: none;" data-bind="visible: true">
+<body style="display: none;" data-bind="visible: true" onLoad="display()">
     <div class="sidenav">
         <span>Set words:</span>
         <textarea id="set-text-area" class="set-text-area" data-bind="textInput: setWords" rows="15"
             cols="25"></textarea>
         <div class="set-controls">
             <input id="file-input" type="file" data-bind="event: {change: fileInputChange}">
-
             <input id="file-button" data-bind="click: fileButtonClick" type="button" value="Load file">
             <input id="save-file-button" data-bind="click: saveFileButtonClick" type="button" value="Save file"><br><br>
             <input data-bind="click: clearSetClick" type="button" value="Clear">
@@ -39,9 +38,9 @@
         <section id="content">
 
             <form class="center" name="clockform">
-                <input name="clock" size=6 value="00:00:00.00" onclick="findTIME()">
-                <input name="clearer" type="button" value="Clear" onclick="clearALL()">
-                <input name="starter" type="button" value="Play/Pause" onclick="findTIME()">
+                <input name="clock" size=7 value="00:00:00.000">
+                <input name="clearer" type="button" value="Clear" onclick="swreset()">
+                <input name="starter" type="button" value="Play/Pause" onclick="startstop()">
             </form>
 
 
