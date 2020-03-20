@@ -22,6 +22,7 @@
             <input id="save-file-button" data-bind="click: saveFileButtonClick" type="button" value="Save file"><br><br>
             <input data-bind="click: clearSetClick" type="button" value="Clear">
             <input data-bind="click: loadSet" type="button" value="Load set"><br>
+            <input data-bind="click: loadSetByIds" type="button" value="Load set by Ids"><br>
         </div>
         <span data-bind="text: 'Unique words: ['+wordsInSentences().length+']', click: showAllPhrases"></span>
         <div data-bind="foreach: wordsInSentences">
@@ -214,6 +215,53 @@
                     }
                 });
             };
+
+            // обработчик кнопки загрузки записей по списку id
+            self.loadSetByIds = function () {
+
+                // формируем URL для извлечение записей по списку id
+                let ids = self.setWords().replace(/ /g, "").split('\n');
+                let url = "http://localhost:8080/records?ids="
+                ids.forEach(id => {
+                    if (id != "") {
+                        url = url + id + ','
+                    }
+                });
+                url = url.slice(0,url.length-1)
+                console.log(url)
+
+                self.records([]);
+                $.ajax(url, {
+                    type: "GET",
+                    success: function (allData) {
+                        var json = ko.toJSON(allData);
+                        var recordsFromServer = JSON.parse(json);
+                        
+                        var array = [];
+                        recordsFromServer.forEach(element => {
+                            var rec = new Phrase({
+                                id: element.id,
+                                word: element.word,
+                                russian: element.russian,
+                                english: element.english,
+                                rule: element.rule,
+                                soundPath: element.soundPath,
+                                mode: "",
+                                currentAnswer: "",
+                                visible: true
+                            });
+                            array.push(rec);
+                        });
+
+                        if (self.isShuffle) {
+                            array = shuffle(array);
+                        }
+                        self.records(array);
+                        self.splitByWords();
+                    }
+                });
+            }
+
 
             self.loadSet = function () {
                 self.setWords(self.setWords().replace(/ \[.*\]/g, ""));
