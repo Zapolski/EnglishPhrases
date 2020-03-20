@@ -343,7 +343,7 @@
             }
 
             self.loadAllAvailableWord = function () {
-                $.ajax("http://localhost:8080/records/words", {
+                $.ajax("http://localhost:8080/words", {
                     type: "GET",
                     success: function (allData) {
                         var json = ko.toJSON(allData);
