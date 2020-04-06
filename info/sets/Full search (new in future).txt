@@ -1,24 +1,10 @@
-
-for the sake
-obsess [0]
-obsessive [0]
-harmful [0]
-bore [0]
-boredom [0]
-addict [0]
-addicted [0]
-addictive [0]
-harmless [0]
-obsession [0]
-
-заставить кого-либо что-либо сделать
-make somebody do something
-
-заставить кого-либо что-либо сделать (2 вариант)
-to be forced to do something
-
-incur [2]
-incurring [1]
-incurred [1]
+for the sake [3]
 on the whole [3]
 strange as it may seem [2]
+
+it's time [18]
+wish [69]
+if [717]
+
+be forced [1]
+are forced [2]

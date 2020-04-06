@@ -70,6 +70,12 @@
                         data-bind="checked: isUseCaseSensitiveSearch, visible: radioSelectedOptionValue() == 1" />case
                     sensitive</label>
                 <label><input type="checkbox" data-bind="checked: isShuffle" />shuffle</label>
+                <br>
+                <label>Min rank: </label>
+                <input id="minRank" data-bind="value: minRank" type="text">
+                <label>Max rank: </label>
+                <input id="maxRank" data-bind="value: maxRank" type="text">
+
 
                 <br><br>
                 <span>Available examples: </span>
@@ -115,6 +121,8 @@
                                 <input data-bind="value: $parent.newSoundPath" type="text" class='input-field'><br>
                                 <label>Rule</label>
                                 <input data-bind="value: $parent.newRule" type="text" class='input-field'><br>
+                                <label>Rank</label>
+                                <input data-bind="value: $parent.newRank" type="text" class='input-field'><br>
                                 <button data-bind="click: $parent.updateRecord">Update record</button>
                             </div>
 
@@ -151,6 +159,9 @@
             self.records = ko.observableArray();
             self.wordsInSentences = ko.observableArray([]);
 
+            self.minRank = ko.observable("0");
+            self.maxRank = ko.observable("10000");
+
             self.isShuffle = false;
             self.isUseCaseSensitiveSearch = false;
 
@@ -160,6 +171,7 @@
             self.newRussian = ko.observable("");
             self.newEnglish = ko.observable("");
             self.newRule = ko.observable("");
+            self.newRank = ko.observable("");
             self.newSoundPath = ko.observable("");
             self.radioSelectedOptionValue = ko.observable("0");
 
@@ -227,7 +239,7 @@
                         url = url + id + ','
                     }
                 });
-                url = url.slice(0,url.length-1)
+                url = url.slice(0, url.length - 1)
                 console.log(url)
 
                 self.records([]);
@@ -236,7 +248,7 @@
                     success: function (allData) {
                         var json = ko.toJSON(allData);
                         var recordsFromServer = JSON.parse(json);
-                        
+
                         var array = [];
                         recordsFromServer.forEach(element => {
                             var rec = new Phrase({
@@ -245,6 +257,7 @@
                                 russian: element.russian,
                                 english: element.english,
                                 rule: element.rule,
+                                rank: element.rank,
                                 soundPath: element.soundPath,
                                 mode: "",
                                 currentAnswer: "",
@@ -271,18 +284,21 @@
                     if (element === "") {
                         return;
                     }
-                    //use search with database references (radioSelectedOptionValue=0)
-                    let url = "http://localhost:8080/records/" + element.toLowerCase();
 
-                    // use full search by sentences (radioSelectedOptionValue=1)
+                    let url = "";
                     if (self.radioSelectedOptionValue() === "1") {
-                        url = "http://localhost:8080/records/query/" + element;
+                        // use full search by sentences (radioSelectedOptionValue=1)
+                        url = "http://localhost:8080/records/query/" + element.toLowerCase();
                         if (self.isUseCaseSensitiveSearch) {
                             url = url + "/0";
                         } else {
                             url = url + "/1";
                         }
+                    } else {
+                        //use search with database references (radioSelectedOptionValue=0)
+                        url = "http://localhost:8080/records/" + element.toLowerCase();
                     }
+                    url = url + "?minRank=" + self.minRank() + "&maxRank=" + self.maxRank();
 
                     $.ajax(url, {
                         type: "GET",
@@ -305,6 +321,7 @@
                                     russian: element.russian,
                                     english: element.english,
                                     rule: element.rule,
+                                    rank: element.rank,
                                     soundPath: element.soundPath,
                                     mode: "",
                                     currentAnswer: "",
@@ -359,18 +376,26 @@
 
             // load records from server: GET on records resource
             self.loadRecordByWord = function () {
-                //use search with database references (radioSelectedOptionValue=0)
-                let url = "http://localhost:8080/records/" + self.searchString().toLowerCase();
 
-                // use full search by sentences (radioSelectedOptionValue=1)
-                if (self.radioSelectedOptionValue() === "1") {
-                    url = "http://localhost:8080/records/query/" + self.searchString();
-                    if (self.isUseCaseSensitiveSearch) {
-                        url = url + "/0";
+                let url = "";
+
+                if (self.searchString() == "") {
+                    url = "http://localhost:8080/records/rank"
+                } else {
+                    if (self.radioSelectedOptionValue() === "1") {
+                        // use full search by sentences (radioSelectedOptionValue=1)
+                        url = "http://localhost:8080/records/query/" + self.searchString();
+                        if (self.isUseCaseSensitiveSearch) {
+                            url = url + "/0";
+                        } else {
+                            url = url + "/1";
+                        }
                     } else {
-                        url = url + "/1";
+                        //use search with database references (radioSelectedOptionValue=0)
+                        url = "http://localhost:8080/records/" + self.searchString().toLowerCase();
                     }
                 }
+                url = url + "?minRank=" + self.minRank() + "&maxRank=" + self.maxRank();
 
                 $.ajax(url, {
                     type: "GET",
@@ -385,6 +410,7 @@
                                 russian: element.russian,
                                 english: element.english,
                                 rule: element.rule,
+                                rank: element.rank,
                                 soundPath: element.soundPath,
                                 mode: "",
                                 currentAnswer: "",
@@ -491,6 +517,7 @@
                 self.newRussian(record.russian());
                 self.newWord(record.word());
                 self.newRule(record.rule());
+                self.newRank(record.rank());
                 self.newSoundPath(record.soundPath());
             }
 
@@ -499,7 +526,15 @@
             }
 
             self.updateRecord = function (record) {
-                var dataJson = '{"id":' + self.newId() + ',"word":"' + self.newWord() + '","russian":"' + self.newRussian() + '","english":"' + self.newEnglish() + '","soundPath":"' + self.newSoundPath() + '","rule":"' + self.newRule() + '"}';
+                var dataJson = '{"id":' +
+                    self.newId() +
+                    ',"word":"' + self.newWord() +
+                    '","russian":"' + self.newRussian() +
+                    '","english":"' + self.newEnglish() +
+                    '","soundPath":"' + self.newSoundPath() +
+                    '","rule":"' + self.newRule() +
+                    '","rank":"' + self.newRank() +
+                    '"}';
                 console.log(dataJson);
                 $.ajax("http://localhost:8080/records/" + self.newId(), {
                     data: dataJson,
@@ -514,6 +549,7 @@
                         record.english(self.newEnglish());
                         record.soundPath(self.newSoundPath());
                         record.rule(self.newRule());
+                        record.rank(self.newRank());
                     }
                 });
             }
@@ -615,6 +651,7 @@
             self.russian = ko.observable(data.russian);
             self.english = ko.observable(data.english);
             self.rule = ko.observable(data.rule);
+            self.rank = ko.observable(data.rank);
             self.soundPath = ko.observable(data.soundPath);
             self.mode = ko.observable(data.mode);
             self.currentAnswer = ko.observable(data.currentAnswer);
