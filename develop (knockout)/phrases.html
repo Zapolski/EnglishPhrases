@@ -87,10 +87,11 @@
                 <tbody data-bind="foreach: records">
                     <tr data-bind="visible: $data.visible()">
                         <td class="center">
-                            <span data-bind="text: ($index()+1)"></span><br>
+                            <span data-bind="text: '№:' + ($index()+1)"></span><br>
                             <input data-bind="event: {change: $parent.showQuestionCheckboxChange}" class="show_question"
-                                type="checkbox">
-                            <span data-bind="text: $data.id()"></span>
+                                type="checkbox"><br>
+                            <span data-bind="text: 'Id:' + $data.id()"></span><br>
+                            <span data-bind="text: 'R:' + $data.rank()"></span>
                         </td>
                         <td>
                             <span data-bind="attr: {tabindex: ($index() + 100001), data_title: $data.rule()}"
@@ -104,9 +105,10 @@
                             <span
                                 data-bind="html: $parent.getEnglishWihtNamesHintsAndFirstUpper($data.english())"></span><br>
                             <div class='check'></div>
-                            <button data-bind="click: $parent.showEditor">Show editor</button>
-                            <button data-bind="click: $parent.hideEditor, visible: ($data.mode() === 'edit')">Hide
-                                editor</button>
+
+                            <button data-bind="click: $data.mode() === 'edit' ? $parent.hideEditor : $parent.showEditor">Show/Hide editor</button>
+                            
+                            <button data-bind="click: $data.mode() === 'info' ? $parent.hideInfo : $parent.showInfo">Show/Hide info</button>
 
                             <div data-bind="visible: ($data.mode() === 'edit')">
                                 <label>Id</label>
@@ -124,6 +126,46 @@
                                 <label>Rank</label>
                                 <input data-bind="value: $parent.newRank" type="text" class='input-field'><br>
                                 <button data-bind="click: $parent.updateRecord">Update record</button>
+                            </div>
+
+                            <div data-bind="visible: ($data.mode() === 'info')">
+                                <br>
+                                <table>
+                                    <tbody>
+                                        <tr data-bind="foreach: $parent.tokens">
+                                            <td data-bind="visible: $index() == 0">
+                                                <span><b>Tokens:</b></span>
+                                            </td>
+                                            <td class="center">
+                                                <span data-bind="text: $data"></span>
+                                            </td>
+                                        </tr>
+                                        <tr data-bind="foreach: $parent.tags">
+                                            <td data-bind="visible: $index() == 0">
+                                                <span><b>Tags:</b></span>
+                                            </td>                                            
+                                            <td class="center">
+                                                <span data-bind="text: $data"></span>
+                                            </td>
+                                        </tr>                                        
+                                        <tr data-bind="foreach: $parent.lemmas">
+                                            <td data-bind="visible: $index() == 0">
+                                                <span><b>Lemmas:</b></span>
+                                            </td>                                            
+                                            <td class="center">
+                                                <span data-bind="text: $data"></span>
+                                            </td>
+                                        </tr>
+                                        <tr data-bind="foreach: $parent.ranks">
+                                            <td data-bind="visible: $index() == 0">
+                                                <span><b>Ranks:</b></span>
+                                            </td>                                            
+                                            <td class="center">
+                                                <span data-bind="text: $data"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                         </td>
@@ -160,7 +202,7 @@
             self.wordsInSentences = ko.observableArray([]);
 
             self.minRank = ko.observable("0");
-            self.maxRank = ko.observable("10000");
+            self.maxRank = ko.observable("60000");
 
             self.isShuffle = false;
             self.isUseCaseSensitiveSearch = false;
@@ -174,6 +216,12 @@
             self.newRank = ko.observable("");
             self.newSoundPath = ko.observable("");
             self.radioSelectedOptionValue = ko.observable("0");
+
+            // for info mode
+            self.tokens = ko.observableArray([]);
+            self.tags = ko.observableArray([]);
+            self.lemmas = ko.observableArray([]);
+            self.ranks = ko.observableArray([]);
 
             self.saveFileButtonClick = function () {
                 console.log("saveFileButtonClick");
@@ -503,12 +551,36 @@
                 });
             }
 
-            self.showEditor = function (record) {
-
+            self.showInfo = function (record) {
                 self.records().forEach(element => {
-                    if (element.mode() === "edit") {
-                        element.mode("");
+                    element.mode("");
+                });
+                
+
+                $.ajax("http://localhost:8090/sentences/check", {
+                    data: record.english(),
+                    type: "POST",
+                    contentType: "application/json",
+                    success: function (allData) {
+                        console.log(allData);
+                        var json = ko.toJSON(allData);
+                        var infoFromServer = JSON.parse(json);                        
+                        self.tokens(infoFromServer.tokens);
+                        self.tags(infoFromServer.tags);
+                        self.lemmas(infoFromServer.lemmas);
+                        self.ranks(infoFromServer.ranks);
+                        record.mode("info");
                     }
+                });
+            }
+
+            self.hideInfo = function (record) {
+                record.mode("");
+            }
+
+            self.showEditor = function (record) {
+                self.records().forEach(element => {
+                    element.mode("");
                 });
 
                 record.mode("edit");

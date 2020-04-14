@@ -1,7 +1,24 @@
-disruptive [3]
+<=7000
+
+entirely [2]
 disrupt [2]
-suspicion [11]
-evidence [8]
-witness [10]
-rotten [10]
-rush [26]
+evidence [7]
+witness [9]
+suspicion [10]
+30
+
+accept [20]
+neighbour [6]
+innocence [4]
+30
+
+rush [21]
+withdrawal [7]
+eventually [2]
+30
+
+belief [5]
+fault [11]
+dam [1]
+jury [3]
+20
