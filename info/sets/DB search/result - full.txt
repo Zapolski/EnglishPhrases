@@ -40,7 +40,6 @@ operate [20]
 april [5]
 june [5]
 produce [12]
-competitor [3]
 subsidiary [4]
 resist [11]
 provide [5]
@@ -87,3 +86,40 @@ september [5]
 october [5]
 customer [4]
 communicate [10]
+
+renewable [4]
+
+throw away [4]
+
+fossil [2]
+
+global [3]
+
+energy [9]
+
+reduce [6]
+
+eco [1]
+
+eco-friendly [1]
+
+emission [1]
+
+consumption [7]
+
+pollution [6]
+
+source [11]
+
+fuel [5]
+
+friendly [5]
+
+warming [3]
+
+
+pollute [5]
+
+consume [5]
+
+recycle [3]

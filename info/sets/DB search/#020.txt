@@ -1,0 +1,6 @@
+throw away [4]
+global [3]
+energy [7]
+reduce [6]
+consumption [5]
+pollution [5]

@@ -1,5 +1,3 @@
-unharmed [2]
-envy [8]
 envied [1]
 impressed by [6]
 would like you [1]
@@ -12,3 +10,4 @@ obsession [1]
 incur [2]
 incurring [1]
 incurred [1]
+

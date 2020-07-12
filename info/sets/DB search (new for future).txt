@@ -1,5 +1,6 @@
 <=7000
 
+#01-01
 entirely [2]
 disrupt [2]
 evidence [7]
@@ -7,18 +8,165 @@ witness [9]
 suspicion [10]
 30
 
+#01-02
 accept [20]
 neighbour [6]
 innocence [4]
 30
 
+#01-03
 rush [21]
 withdrawal [7]
 eventually [2]
 30
 
+#04
 belief [5]
 fault [11]
 dam [1]
 jury [3]
-20
+rival [10]
+30
+
+#05
+crowded [4]
+vanish [6]
+plea [5]
+dull [15]
+30
+
+#06
+violence [3]
+ferry [2]
+disaster [8]
+turn up [7]
+strengthen [10]
+30
+
+#07
+shrink [8]
+vital [12]
+rubber [1]
+inquiry [9]
+
+#08
+temptation [4]
+blow [27]
+31
+
+#09
+fine [31]
+31
+
+#10
+victim [8]
+drawer [2]
+tribe [3]
+anxiety [7]
+committee [3]
+frontier [2]
+inherit [5]
+30
+
+#11
+striking [3]
+prior [4]
+carpet [3]
+struggle [10]
+treaty [3]
+defeat [7]
+30
+
+#12
+miserable [10]
+poverty [4]
+until [4]
+heat [13]
+31
+
+
+#13
+clue [7]
+funeral [2]
+outrage [6]
+resignation [4]
+slam [5]
+principal [6]
+30
+
+#14
+fire [23]
+plague [4]
+ensure [1]
+28
+
+#15
+dedicate [3]
+bloom [3]
+mass [14]
+entrance [11]
+referendum [2]
+33
+
+chains
+
+#16
+motivate [4]
+solely [2]
+scholarship [3]
+drama [11]
+ancient [4]
+civilization [5]
+dawn [7]
+
+------------------------------
+
+#01-01,01-02,01-03
+#02-01
+convict [3]
+trial [7]
+appeal [18]
+gradually [2]
+#02-02
+definite [4]
+assault [11]
+intend [6]
+regard [9]
+#02-03
+certainly [7]
+sincere [5]
+apology [3]
+sneak [8]
+representative [4]
+readily [3]
+#02-04
+corridor [4]
+injury [5]
+wind [10]
+
+youngster [0]
+wildlife [0]
+drought [0]
+hurricane [0]
+decade [0]
+consequence [0]
+
+#01-04,01-05,01-06
+#02-05
+judge [13]
+anxiety [7]
+beneath [9]
+#02-06
+sight [14]
+spill [6]
+parade [10]
+#02-07
+thin [25]
+steadily [4]
+tend [1]
+#03-08
+outer [3]
+narrow [12]
+oven [2]
+donation [3]
+genuine [6]
